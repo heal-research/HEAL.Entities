@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
+    <Company></Company>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <Description>Provides an easy attribute based repository wrapper to the EPPlus library. The structure of an excel source file is defined for one domain object by defining c# attributes for each class property.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HEAL.Entities.DataAccess.Abstractions\HEAL.Entities.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\HEAL.Entities.Utils\HEAL.Entities.Utils.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\HEAL.Parsers.DIAdem\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

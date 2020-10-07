@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>HEAL.Entities.Utils</PackageId>
+    <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
+    <AssemblyName>HEAL.Entities.Utils</AssemblyName>
+    <RootNamespace>HEAL.Entities.Utils</RootNamespace>
+    <Company></Company>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <Description>Extension methods and base implementations of several util features. e.g. QuickEuqalityComparer, Extensions for IEnumerable, Regex, ...</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\HEAL.Parsers.DIAdem\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

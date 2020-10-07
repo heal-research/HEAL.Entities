@@ -1,0 +1,86 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+
+trigger:
+  branches:
+    include:
+    - master
+    - release/*
+    - feature/*
+  paths:
+    exclude:
+    - docs/*
+    - LICENSE.*
+    - README.*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  # SolutionDir variable is required for prebuild events in projects
+  SolutionDir: '$(Build.SourcesDirectory)\src\' 
+  buildConfiguration: Release
+
+steps:
+
+# ------------ Nerdbank.GitVersioning ------------
+- task: DotNetCoreCLI@2  
+  displayName: Install NBGV tool
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+
+- script: nbgv cloud
+  displayName: Set Version
+
+
+# ------------ Prepare environment ------------
+- task: UseDotNet@2
+  displayName: 'install .NET Core SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '2.x'
+
+# ------------ build and test projects ------------
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    configuration: '$(buildConfiguration)'
+    command: 'test'
+    projects: '**/src/tests/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+    failTaskOnFailedTests: true
+
+# ------------ pack and deploy packages ------------
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  displayName: 'NuGet pack'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/*.csproj;!**/*Tests.csproj'
+    versioningScheme: 'off'
+    includeSymbols: true
+    packDestination: '$(Build.ArtifactStagingDirectory)'
+
+- task: NuGetCommand@2
+  displayName: 'nuget push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '37a49f3c-4d09-416a-9500-332df9473646/cf346de6-27ff-4cf4-9dab-25accf6dfa6c'
+    allowPackageConflicts: true

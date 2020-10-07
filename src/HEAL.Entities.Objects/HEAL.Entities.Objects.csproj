@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
+    <Company></Company>
+    <Product />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <Description>Interfaces and base implementations for plain old c# domain objects. Domain Objects are used as base for EF (DB, DWH) or Excel repository acess methods.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Excel\ExcelColumnEnum.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ExcelColumnEnum.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Excel\ExcelColumnEnum.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExcelColumnEnum.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\HEAL.Parsers.DIAdem\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
+    <Company></Company>
+    <Product />
+    <Description>Interfaces and abstract implementations of repository based data access.</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <SignAssembly>true</SignAssembly>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HEAL.Entities.Objects\HEAL.Entities.Objects.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\HEAL.Parsers.DIAdem\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

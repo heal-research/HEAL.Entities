@@ -1,0 +1,39 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ output extension=".cs" #>
+namespace HEAL.Entities.Objects.Excel
+{
+	public enum ExcelColumnEnum
+	{
+	A = 1<#  
+		for(int i = 2; i < 200; i++)  
+		{  
+			Write(", ");
+			Write(GetExcelColumnName(i));
+			Write("= "+i);
+		}			
+	#>
+
+	}
+}
+
+<#
+
+ string GetExcelColumnName(int columnNumber) {
+      int dividend = columnNumber;
+      string columnName = String.Empty;
+      int modulo;
+
+      while (dividend > 0) {
+        modulo = (dividend - 1) % 26;
+        columnName = Convert.ToChar(65 + modulo).ToString() + columnName;
+        dividend = (int)((dividend - modulo) / 26);
+      }
+
+      return columnName;
+    }
+
+#>

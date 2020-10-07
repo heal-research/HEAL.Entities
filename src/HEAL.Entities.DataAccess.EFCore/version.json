@@ -1,0 +1,4 @@
+{
+  "inherit": true,
+  "pathFilters": ["."]
+}
