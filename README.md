@@ -102,9 +102,10 @@ public class Student : IDomainObject<long?>
 using (var context = new DbContext()) {
   var repo = new CRUDRepository<Student,long>(context);
   var student = new Student(){
-    Name = "Quentin Tarantino",
-    EMail = "quentin@tarantino.abcde"
+    Name = "Miley Elliott",
+    EMail = "Miley@Elliott.abcde"
   }
+
   //.e.g. BIGINT Identity for student id
   var studentId = repo.Insert(student); 
   ...
