@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/heal-research/HEAL.Entities/_apis/build/status/heal-research.HEAL.Entities?branchName=master)](https://dev.azure.com/heal-research/HEAL.Entities/_build/latest?definitionId=1&branchName=master)
+
 # HEAL.Entities
 HEAL.Entities provides default classes and implementations for domain driven software development and application design. Including repository implementations for:
 - reading excel files
@@ -16,9 +18,24 @@ HEAL.Entities.Utils provides additional handy utilities, snippets and extension 
 # Getting Started
 
 ## Get the Nuget Packages
-All packages of this solution can be found on the public nuget.org feed.
+All release packages of this solution can be found on the public nuget.org feed.
 
-Additionally, we provide a public nuget build feed where you can get the latest release candidates or feature builds from our CI platform see the [development instructions](docs/development.md) or visit [the public feed]() or click on the badges in [Features and Usage](#features-and-usage).
+Additionally, we provide a public nuget build feed where you can get the latest release candidates or feature builds from our CI platform see the [development instructions](docs/development.md).
+
+To use the packages, include the following feed URL in visual studio 
+```
+https://pkgs.dev.azure.com/heal-research/HEAL.Entities/_packaging/HEAL.Entities/nuget/v3/index.json
+```
+or adda nuget.config file to your project, in the same folder as your .csproj or .sln file with the following content
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="HEAL.Entities" value="https://pkgs.dev.azure.com/heal-research/HEAL.Entities/_packaging/HEAL.Entities/nuget/v3/index.json" />
+  </packageSources>
+</configuration>
+```
 
 ## Build locally or contribute
 
