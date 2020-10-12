@@ -1,4 +1,4 @@
-﻿using HEAL.Entities.DataAcces.Dwh.DataVaultV2.Abstractions;
+﻿using HEAL.Entities.DataAccess.Dwh.DataVaultV2.Abstractions;
 using HEAL.Entities.DataAccess.Caching.Abstractions;
 using HEAL.Entities.DataAccess.EFCore.Caching;
 using HEAL.Entities.DataAccess.EFCore.Dwh.DataVaultV2.Generic;
