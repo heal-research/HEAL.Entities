@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using HEAL.Entities.DataAccess.EPPlus.ContextConfiguration.Tests;
 using HEAL.Entities.DataAccess.EPPlus.Tests;
 using Xunit;
 
@@ -19,5 +20,21 @@ namespace HEAL.Entities.DataAccess.EPPlus {
       Assert.Equal(expected.Surname, actual.Surname);
       Assert.Equal(expected.Hobbies?.OrderBy(x=>x), actual.Hobbies?.OrderBy(x => x));
     }
+
+    public static DomainObject_FluentApi ActualRow10 = new DomainObject_FluentApi() {
+      Age = 23,
+      HasChildren = true,
+      Married = true,
+      Occupation = UnitTestMetadata.DefaultOccupation,
+      Prename = "Tess",
+      Surname = "Morrison",
+      Salary = 88.44m,
+      Hobbies = new string[]{
+          "Videography",
+          "Photography",
+          "Drone Pilot"
+        },
+      PrimaryKey = 10,
+    };
   }
 }

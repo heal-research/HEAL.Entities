@@ -4,14 +4,16 @@ using System.IO;
 namespace HEAL.Entities.DataAccess.Excel {
 
   public class ExcelFileOptions : ICloneable, IDisposable {
-
-    public ExcelFileOptions(Stream excelFileStream, string filePassword = default) {
-      ExcelFileStream = excelFileStream;
-      FilePassword = filePassword;
+    public ExcelFileOptions() {
     }
-    public ExcelFileOptions(Stream excelFileStream, string worksheetName, string filePasword = default) {
+
+    public ExcelFileOptions(Stream excelFileStream, string worksheetName = default, string filePasword = default) {
+      SetFileLocation(excelFileStream, worksheetName, filePasword);
+    }
+
+    public void SetFileLocation(Stream excelFileStream, string worksheetName = default, string filePasword = default) {
       ExcelFileStream = excelFileStream;
-      WorksheetName = worksheetName;
+      WorksheetName = worksheetName ?? DEFAULT_WORKSHEET_NAME;
       FilePassword = filePasword;
     }
 
