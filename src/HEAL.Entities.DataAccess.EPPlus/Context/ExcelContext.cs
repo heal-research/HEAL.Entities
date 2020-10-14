@@ -19,6 +19,8 @@ namespace HEAL.Entities.DataAccess.Excel {
     /// </summary>
     /// <param name="options">leave null to apply default configurations</param>
     public ExcelContext(ExcelOptions options = null) {
+      if (options == null)
+        options = new ExcelOptions();
       Options = options;
       ModelBuilder = new ExcelModelBuilder();
       OnCreating(ModelBuilder);
