@@ -76,8 +76,11 @@ namespace HEAL.Entities.DataAccess.Abstractions {
       TargetProperties = Context.GetPropertyBuilders<TEntity>();
 
       ValidateExcelSourceConfiguration(excelFileOptions, context);
-      SetExcelDataSource(excelFileOptions);
-      ValidateHeaderNames();
+
+      if (excelFileOptions.ExcelFileStream != null) {
+        SetExcelDataSource(excelFileOptions.ExcelFileStream, excelFileOptions.WorksheetName, excelFileOptions.FilePassword);
+
+      }
     }
 
     /// <summary>
@@ -111,9 +114,11 @@ namespace HEAL.Entities.DataAccess.Abstractions {
     /// </summary>
     /// <param name="file">Path to the source excel file</param>
     /// <param name="workSheetName">name of the worksheet in the file</param>
-    protected virtual void SetExcelDataSource(ExcelFileOptions excelFileOptions) {
-      ExcelPackage = new ExcelPackage(excelFileOptions.ExcelFileStream, excelFileOptions.FilePassword);
-      ExcelWorkSheet = ExcelPackage.Workbook.Worksheets[excelFileOptions.WorksheetName];
+    public virtual void SetExcelDataSource(Stream excelFileStream, string worksheetName = default, string filePasword = default) {
+      ExcelPackage = new ExcelPackage(excelFileStream, filePasword);
+      ExcelWorkSheet = ExcelPackage.Workbook.Worksheets[worksheetName];
+
+      ValidateHeaderNames();
     }
 
     internal void ValidateHeaderNames() {
@@ -146,6 +151,9 @@ namespace HEAL.Entities.DataAccess.Abstractions {
     }
 
     protected virtual string ExtractHeaderCellValue(int columnIndex) {
+      if (ExcelWorkSheet == null) throw new NullReferenceException($"{nameof(EPPlusDomainRepository<TEntity, TKey>)}.{nameof(ExcelWorkSheet)} is null." +
+        $" Ensure calling method '{nameof(SetExcelDataSource)}' or passing a not null '{nameof(ExcelFileOptions)}.{nameof(ExcelFileOptions.ExcelFileStream)}'" +
+        $" before using data access methods");
       return ExcelWorkSheet.Cells[ExcelFileOptions.HeaderLineNumber, columnIndex].GetValue<string>();
     }
 
@@ -208,14 +216,14 @@ namespace HEAL.Entities.DataAccess.Abstractions {
     }
 
     protected virtual void ParseConfiguredColumn(int rowIndex, TEntity row, PropertyInfo targetProperty, ExcelPropertyConfiguration columnConfiguration) {
-      
+
 
       //Excel attribute defined the target column
       var propertyColIndex = columnConfiguration.ColumnIndex;
 
-      if (ExcelWorkSheet == null)
-        throw new NullReferenceException($"Error in '{nameof(EPPlusDomainRepository<TEntity, TKey>)}' the property '{nameof(ExcelWorkSheet)}'" +
-          $" is null. The repository was most likely disposed before an IEnumberable was evaluated.");
+      if (ExcelWorkSheet == null) throw new NullReferenceException($"{nameof(EPPlusDomainRepository<TEntity, TKey>)}.{nameof(ExcelWorkSheet)} is null." +
+        $" Ensure calling method '{nameof(SetExcelDataSource)}' or passing a not null '{nameof(ExcelFileOptions)}.{nameof(ExcelFileOptions.ExcelFileStream)}'" +
+        $" before using data access methods");
 
       if (ExcelWorkSheet.Cells[rowIndex, propertyColIndex].Value == null) {
         targetProperty.SetValue(row, columnConfiguration.DefaultValue);

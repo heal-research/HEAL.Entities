@@ -5,6 +5,7 @@ using HEAL.Entities.DataAccess.Abstractions;
 using HEAL.Entities.DataAccess.EPPlus.AttributeConfiguration.Tests;
 using HEAL.Entities.DataAccess.EPPlus.ContextConfiguration.Tests;
 using HEAL.Entities.DataAccess.EPPlus.Tests;
+using HEAL.Entities.DataAccess.Excel.Abstractions;
 using Xunit;
 
 namespace HEAL.Entities.DataAccess.EPPlus.Tests {
@@ -17,19 +18,22 @@ namespace HEAL.Entities.DataAccess.EPPlus.Tests {
       Assert.Throws<ArgumentOutOfRangeException>(() => {
         using (var options = Factory.GetExcelFileOptions()) {
           options.HeaderLineNumber = -1;  //negative header row
-          using (var repo = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
+          using (IExcelRepository<DomainObject_FluentApi, int> repo 
+          = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
         }
       });
       Assert.Throws<ArgumentOutOfRangeException>(() => {
         using (var options = Factory.GetExcelFileOptions()) {
           options.DataStartLineNumber = -1;   //negative header row
-          using (var repo = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
+          using (IExcelRepository<DomainObject_FluentApi, int> repo 
+          = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
         }
       });
       Assert.Throws<ArgumentOutOfRangeException>(() => {
         using (var options = Factory.GetExcelFileOptions()) {
           options.DataMaximumLineNumber = -1; //negative header row
-          using (var repo = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
+          using (IExcelRepository<DomainObject_FluentApi, int> repo 
+          = new EPPlusDomainRepository<DomainObject_FluentApi, int>(Factory.FluentApi.GetContext(), options)) { }
         }
       });
     }
@@ -39,9 +43,10 @@ namespace HEAL.Entities.DataAccess.EPPlus.Tests {
       IEnumerable<ITestDomainObject> testData_Attributes;
       using (var context = Factory.FluentApi.GetContext())
       using (var fileOptions = Factory.GetExcelFileOptions())
-      using (var repo = Factory.FluentApi.GetRepo_EndIndicator(context,fileOptions)) {
-        Assert.Equal(UnitTestMetadata.ExcelDataCount,repo.Count());
-        Assert.Equal(UnitTestMetadata.ExcelDataCount,repo.GetAll().Count());
+      using (IExcelRepository<DomainObject_FluentApi, int> repo 
+        = Factory.FluentApi.GetRepo_EndIndicator(context, fileOptions)) {
+        Assert.Equal(UnitTestMetadata.ExcelDataCount, repo.Count());
+        Assert.Equal(UnitTestMetadata.ExcelDataCount, repo.GetAll().Count());
       }
     }
 
@@ -50,7 +55,8 @@ namespace HEAL.Entities.DataAccess.EPPlus.Tests {
       IEnumerable<ITestDomainObject> testData_Attributes;
       using (var context = Factory.Attributed.GetContext())
       using (var fileOptions = Factory.GetExcelFileOptions())
-      using (var repo = new EPPlusDomainRepository<DomainObject_Attributes, int>(context, fileOptions)) {
+      using (IExcelRepository<DomainObject_Attributes, int> repo 
+        = new EPPlusDomainRepository<DomainObject_Attributes, int>(context, fileOptions)) {
         //read all data from the (same) excel using the attribute based access method
         testData_Attributes = repo.GetAll().Take(UnitTestMetadata.ExcelDataCount).ToList();
       }
@@ -58,7 +64,8 @@ namespace HEAL.Entities.DataAccess.EPPlus.Tests {
       IEnumerable<ITestDomainObject> testData_FluentApi;
       using (var context = Factory.FluentApi.GetContext())
       using (var fileOptions = Factory.GetExcelFileOptions())
-      using (var repo = new EPPlusDomainRepository<DomainObject_FluentApi, int>(context, fileOptions)) {
+      using (IExcelRepository<DomainObject_FluentApi, int> repo 
+        = new EPPlusDomainRepository<DomainObject_FluentApi, int>(context, fileOptions)) {
         //read all data from the (same) excel using the Fluent API based access method
         testData_FluentApi = repo.GetAll().Take(UnitTestMetadata.ExcelDataCount).ToList();
       }
@@ -71,30 +78,50 @@ namespace HEAL.Entities.DataAccess.EPPlus.Tests {
 
     [Fact]
     public void GetByKeyOrRowId() {
-      var actualRow10 = new DomainObject_FluentApi() {
-        Age = 23,
-        HasChildren = true,
-        Married = true,
-        Occupation = UnitTestMetadata.DefaultOccupation,
-        Prename = "Tess",
-        Surname = "Morrison",
-        Salary = 88.44m,
-        Hobbies = new string[]{
-          "Videography",
-          "Photography",
-          "Drone Pilot"
-        },
-        PrimaryKey = 10,
-      };
-
       using (var context = Factory.FluentApi.GetContext())
       using (var fileOptions = Factory.GetExcelFileOptions())
-      using (var repo = new EPPlusDomainRepository<DomainObject_FluentApi, int>(context, fileOptions)) {
+      using (IExcelRepository<DomainObject_FluentApi, int> repo 
+        = new EPPlusDomainRepository<DomainObject_FluentApi, int>(context, fileOptions)) {
         var parsedRow10 = repo.GetByRowId(10);
-        UnitTestMetadata.AssertEqual(actualRow10, parsedRow10);
+        UnitTestMetadata.AssertEqual(UnitTestMetadata.ActualRow10, parsedRow10);
 
         parsedRow10 = repo.GetByKey(10);
-        UnitTestMetadata.AssertEqual(actualRow10, parsedRow10);
+        UnitTestMetadata.AssertEqual(UnitTestMetadata.ActualRow10, parsedRow10);
+      }
+    }
+
+
+    [Fact]
+    public void SetFileLocationAtLaterTime() {
+      using (var context = Factory.FluentApi.GetContext()) {
+        using (var fileOptions = Factory.GetExcelFileOptions()) {
+
+          //remove all file related info from options
+          var fileStream = fileOptions.ExcelFileStream;
+          fileOptions.ExcelFileStream = null;
+
+          var worksheetName = fileOptions.WorksheetName;
+          fileOptions.WorksheetName = null;
+
+          var filePassword = fileOptions.FilePassword;
+          fileOptions.FilePassword = null;
+
+          using (IExcelRepository<DomainObject_FluentApi, int> repo 
+            = new EPPlusDomainRepository<DomainObject_FluentApi, int>(context, fileOptions)) {
+            DomainObject_FluentApi parsedRow;
+
+            //without file information, repo runs into exception
+            Assert.Throws<NullReferenceException>(() => {
+              parsedRow = repo.GetByRowId(10);
+            });
+
+            //set file location before usage
+            repo.SetExcelDataSource(fileStream, worksheetName, filePassword);
+            parsedRow = repo.GetByRowId(10);
+            UnitTestMetadata.AssertEqual(UnitTestMetadata.ActualRow10, parsedRow);
+
+          }
+        }
       }
     }
   }
