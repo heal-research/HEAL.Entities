@@ -7,7 +7,7 @@
   $csprojFiles = Get-ChildItem $srcPath -Filter *.csproj -Depth 1
 
   If ($csprojFiles.Count -le 0) {
-    "No projects found, ABORTING ..."
+    "No projects found."
     Return
   }
 

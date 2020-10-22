@@ -2,16 +2,16 @@
 
 # HEAL.Entities
 HEAL.Entities provides default classes and implementations for domain driven software development and application design. Including repository implementations for:
-- reading excel files
-- CRUD access to any RDBMS compatible with EntityFrameworkCore.
-- the DataVault-V2 data warehousing modeling schema.
+- CRUD access to any RDBMS compatible with EntityFrameworkCore,
+- the Data Vault 2.0 data model,
+- reading Excel files
 
-HEAL.Entities.Utils provides additional handy utilities, snippets and extension methods for base c# functionality.  
+HEAL.Entities.Utils provides additional utilities, snippets, and extension methods.
 
 ## Content
 1. [Getting Started](#getting-started)
 
-1. [Features and Usage ](#features-and-usage)
+1. [Features and Usage](#features-and-usage)
 
 1. [License](#license)
 
@@ -20,13 +20,13 @@ HEAL.Entities.Utils provides additional handy utilities, snippets and extension 
 ## Get the Nuget Packages
 All release packages of this solution can be found on the public nuget.org feed.
 
-Additionally, we provide a public nuget build feed where you can get the latest release candidates or feature builds from our CI platform see the [development instructions](docs/development.md).
+Additionally, we provide a public nuget build feed where you can get the latest release candidate or feature builds from our CI platform see the [development instructions](docs/development.md).
 
-To use the packages, include the following feed URL in visual studio 
+To use the package include the following feed URL in visual studio 
 ```
 https://pkgs.dev.azure.com/heal-research/HEAL.Entities/_packaging/HEAL.Entities/nuget/v3/index.json
 ```
-or adda nuget.config file to your project, in the same folder as your .csproj or .sln file with the following content
+or add a nuget.config file to your project, in the same folder as your .csproj or .sln file with the following content
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -37,35 +37,34 @@ or adda nuget.config file to your project, in the same folder as your .csproj or
 </configuration>
 ```
 
-## Build locally or contribute
+## Build Locally or Contribute
 
 Prerequisites and build instructions can be found in the [development instructions](docs/development.md).
 
 # Features and Usage 
 
 - [**HEAL.Entities.DataAccess.Abstractions**](#abstract-repository)
-  
+
   Interfaces and abstract base implementations for DataAccess
 
 - [**HEAL.Entities.DataAccess.EFCore**](#rdbms-repositories) or visit [here](docs/HEAL.Entities.DataAccess.EFCore.md) for details
 
-  Repository implementations for RDBMS access. Provides default implementations for abstract base classes and interfaces for domain oriented CRUD access to relational databases. Provides repositories for the data warehousing modeling schema DataVault V2. 
+  Repository implementations for RDBMS access. Provides default implementations for abstract base classes and interfaces for domain oriented CRUD access to relational databases. Provides repositories for Data Vault 2.0.
 
 - [**HEAL.Entities.DataAccess.EPPlus**](#excel-repositories) or visit [here](docs/HEAL.Entities.DataAccess.EPPlus.md) for details
 
-  Domain repository based access to Excel files. Utilizes the EPPlus library to allow for formula calculation prior to data reads. *Supports only read access as of now.*
+  Domain repository based access to Excel files. Utilizes [EPPlus](https://github.com/EPPlusSoftware/EPPlus) for formula calculation prior to data reads. *Currently only supports only read access.*
 
 - [**HEAL.Entities.Objects**](#domain-objects)
-
-  Interfaces, abstract implementations or Enums for business entities as POCOs that 
-  are required for usage of the access libraries.
+  Interfaces, abstract implementations and enumerated types for business entities impllemented as POCOs that 
+  are required for the data access libraries.
 
 - [**HEAL.Entities.Utils**](#utils-library) or visit [here](docs/HEAL.Entities.Utils.md) for details
 
-  Small code snippets or extension methods that are shared by internal libraries or are  reoccurring in application projects. The contents of this project are restricted to target standard .NET namespaces. No further/external dependencies are welcome in this project in order to ensure that the Utils project can be consumed without dependency issues.
+  Code snippets and extension methods that are shared by internal libraries or are reoccurring in multiple projects. The contents of this project are restricted to target standard .NET namespaces. No further/external dependencies are welcome in this project in order to ensure that the Utils project can be consumed without dependency issues.
 
 # Abstract Repository
-The `HEAL.Entities.DataAccess.Abstractions` library contains the interfaces and abstract implementations of domain driven data access repositories. The base `IReadRepository<TEntity, TKey>` interface defines the bare minimum read ability and it's derived `ICRUDDomainRepository<TEntity, TKey>` defines the bare minimum of create, read, update and delete capabilities. 
+The `HEAL.Entities.DataAccess.Abstractions` library contains the interfaces and abstract implementations of domain driven data access repositories. The `IReadRepository<TEntity, TKey>` interface shown below defines the minimum methods required for read-only access. The `ICRUDDomainRepository<TEntity, TKey>` interface specializes functionality for create, read, update and delete capabilities. 
 
 ```C#
 public interface IReadRepository<TEntity, TKey>
@@ -82,19 +81,19 @@ public interface IReadRepository<TEntity, TKey>
 }
 ```
 
-This shared abstraction library ensures that a repositories `IPersonRepository: IReadRepository<Person,long>` implementation can switch between e.g. Excel and RDBMS implementation. This allows for example to read data from an Excel source but to store it to a Database simply by switching the implementation at runtime.
-
-This genericity enables clear separation of concerns and easy maintenance of code, though at the higher cost of solution design and initial implementation effort.
+This shared abstraction library ensures that repository can switch between e.g. Excel and RDBMS implementation (e.g. a repository `IPersonRepository: IReadRepository<Person,long>`). This allows for example to read data from an Excel source but to store it to a Database simply by switching the implementation at runtime.
+This enables clear separation of concerns and easy maintenance of code, though at the higher cost of solution design and initial implementation effort.
 
 # RDBMS Repositories
-**Visit [here](docs/HEAL.Entities.DataAccess.EFCore.md) for more details.**
+**Visit [HEAL.Entities.DataAccess.EFCore documentation](docs/HEAL.Entities.DataAccess.EFCore.md) for more details.**
 
-The RDBMS repository project provides Domain Object oriented database access for relational database management systems by utilizing the EntityFramework Core library. 
+The RDBMS repository project provides domain oriented database access by utilizing the EntityFramework Core library. 
 
+Usage example:
 ```C#
 public class Student : IDomainObject<long?> 
 {
-  public long? StudientId { get; set; }
+  public long? StudentId { get; set; }
   public string Name { get; set; }
   public string EMail { get; set; }
 }
@@ -102,24 +101,25 @@ public class Student : IDomainObject<long?>
 using (var context = new DbContext()) {
   var repo = new CRUDRepository<Student,long>(context);
   var student = new Student(){
-    Name = "Miley Elliott",
-    EMail = "Miley@Elliott.abcde"
+    Name = "Xenocrates",
+    EMail = "Xenocrates@mail.bc"
   }
 
-  //.e.g. BIGINT Identity for student id
+  // e.g. BIGINT Identity for student id
   var studentId = repo.Insert(student); 
   ...
   IEnumerable<Person> persons = repo.GetAll();
 }
 ```
 
-Additionally, this package also provides default repository implementations for the DWH modeling schema **DataVault-V2** and all its associated table type, Hub, Link, Satellite. Visit [here](docs/HEAL.Entities.DataAccess.EFCore.DWH.DV2.md) for more details.
+This package also provides default repository implementations for the **Data Vault 2.0** schema with Hub, Link, and Satellite tables. Visit [here](docs/HEAL.Entities.DataAccess.EFCore.DWH.DV2.md) for more details.
 
 # Excel Repositories
 **Visit [here](docs/HEAL.Entities.DataAccess.EPPlus.md) for more details.**
 
-The `HEAL.Entities.DataAccess.EPPlus` library is an attempt to provide easy parsing of line oriented, structure excel data as .net objects utilizing the EPPlus Library. The goal is to make the repository easy to use, with as little configuration as possible.
+`HEAL.Entities.DataAccess.EPPlus` allows access to work with line-oriented Excel data sheets through .NET objects and utilizes [EPPlus](https://github.com/EPPlusSoftware/EPPlus).
 
+Example for data stored in an Excel sheet:
 | Row Nr. | A              | B         |
 |---------|----------------|-----------|
 |         | **First Name** | **Age**   |
@@ -127,45 +127,43 @@ The `HEAL.Entities.DataAccess.EPPlus` library is an attempt to provide easy pars
 | 2       | Penelope       | 41        |
 | 3       | Julia          | 37        |
 
-Such an example excel table can be parsed with the minimal code example shown below.
-
+This table can be read with the following code.
 ```C#
-public class ExcelDataObject : IDomainObject<int>, ITestDomainObject {
+public class Person : IDomainObject<int>, ITestDomainObject {
   [ExcelAudit(ExcelAuditProperties.RowId)]
   public int PrimaryKey { get; set; }  
   [ExcelColumnConfiguration(ExcelColumnEnum.A)]
-  public string Prename { get; set; }
+  public string Name { get; set; }
   [ExcelColumnConfiguration(ExcelColumnEnum.B)]
   public int Age { get; set; }
 }
 ...
-using (var context = new ExcelContext()){
-  //extracts mapping information from the attributes
-  context.BuildAttributedEntity<ExcelDataObject>();
+using (var context = new ExcelContext()) {
+  // extracts mapping information from the attributes
+  context.BuildAttributedEntity<Person>();
 
   using (var fileOptions = new ExcelFileOptions(new FileStream(@"Data\TestData.xlsx", FileMode.Open)))
-  using (var repo new EPPlusDomainRepository<ExcelDataObject, int>(context,fileOptions)) {
-    IEnumerable<ExcelDataObject> data = repo.GetAll();
+  using (var repo = new EPPlusDomainRepository<Person, int>(context, fileOptions)) {
+    IEnumerable<Person> data = repo.GetAll();
   }
 }
 ```
 
-But the excel repository also supports clean separation of concerns in the plain old clr object (POCO) by providing a fluent API for property mapping comparable to .NET's Entity Framework. 
+The Excel repository supports clean separation of concerns in the POCO by providing a fluent API for property mapping similar to .NET Entity Framework. 
 
 ```C#
 public class TestExcelContext : ExcelContext {
 
-  public TestExcelContext(ExcelOptions options) : base(options) {
-  }
+  public TestExcelContext(ExcelOptions options) : base(options) { }
 
   protected override void OnCreating(ExcelModelBuilder modelBuilder) {
-    modelBuilder.Entity<DomainObject_FluentApi>(Configure_ExcelDomainObjectConfiguration);
+    modelBuilder.Entity<Person>(Configure_ExcelDomainObjectConfiguration);
   }
 
-  private void Configure_ExcelDomainObjectConfiguration(ExcelEntityBuilder<DomainObject_FluentApi> builder) {
+  private void Configure_ExcelDomainObjectConfiguration(ExcelEntityBuilder<Person> builder) {
     builder.AuditRowId(x => x.PrimaryKey);
 
-    builder.Property(x => x.Prename)
+    builder.Property(x => x.Name)
       .Column(ExcelColumnEnum.A)
       .HasHeaderName("First Name");
     ...
@@ -175,7 +173,7 @@ public class TestExcelContext : ExcelContext {
 ```
 
 # Domain Objects
-The `HEAL.Entities.Objects` project serves as a base for all domain object oriented libraries of this solution. A domain object is kept as simple as possible, and considers only comparability and unique identification as core requirements for one object. 
+`HEAL.Entities.Objects` serves as a base for all domain object oriented libraries of this solution. Domain objects have a unique identification for comparison of objects.
 
 ```C#
 public interface IDomainObject<T> : IComparable<IDomainObject<T>>
@@ -184,17 +182,17 @@ public interface IDomainObject<T> : IComparable<IDomainObject<T>>
   T PrimaryKey { get; set; }
 }     
 ```
-This approach also enables composite or complex key support for any of the supported repositories.
+Composite keys for repositories are supported as well.
 
 # Utils Library
-HEAL.Entities.Utils contains handy utility methods used in other projects of this solution that are general enough to allow and useful enough to warrant extraction into a separate project. 
+HEAL.Entities.Utils contains utility methods used in multiple projects of this solution that are general enough to warrant extraction into a separate project. 
 
-The intention of this project is that it is lightweight and introduces no additional external dependencies if used. This allows HEAL.Entities.Utils to be included in any target project where any of the code might prove useful.
+This project is lightweight and introduces no additional external dependencies. 
 
-Snippets/Functionality provides by this project includes for example:
-- data diff comparison for 2D jagged data structures
+Functionality includes for example:
+- Algorithm for finding data differences between 2D jagged data structures
 - reflection helpers for property selectors
-- extensions to `IEnumerable<T>` that provide additional types of sorting variants
+- extension methods for `IEnumerable<T>` that provide sorting functionality
 
 **Visit [here](docs/HEAL.Entities.Utils.md) for more details.**
 
@@ -224,3 +222,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+# Closing Remarks
+Excel is a registered trademark of Microsoft.

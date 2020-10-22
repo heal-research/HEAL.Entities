@@ -1,26 +1,26 @@
 # HEAL.Entities.DataAccess.EPPlus
 
-The `HEAL.Entities.DataAccess.EPPlus` library provides easy domain object orientd parsing of excel data by utilizing the EPPlus Library.
+`HEAL.Entities.DataAccess.EPPlus` provides domain object oriented data access for Excel files and utilizes [EPPlus](https://github.com/EPPlusSoftware/EPPlus).
 
-Assume we want to parse the following sample excel.
+Assume we want to parse the following Excel table.
 
 | A              | B             | C       | D              | E          | F                  | G                | H                             |
 |----------------|---------------|---------|----------------|------------|--------------------|------------------|-------------------------------|
 | **First Name** | **Last Name** | **Age** | **Occupation** | **Salary** | **Marital Status** | **Has Children** | **Hobbies**                   |
-| Miley          | Elliott       | 23      | Medic          | 59,63      | Married            | 1                | Ice skating, Quizzes          |
-| Penelope       | Scott         | 25      |                | 75,31      | Married            | 0                | Sculpting, Drawing, Animation |
-| Henry          | Murray        | 25      | Journalist     | 62,87      | Married            | 0                | Cooking, Juggling             |
+| Miley          | Elliott       | 23      | Medic          | 59.63      | Married            | 1                | Ice skating, Quizzes          |
+| Penelope       | Scott         | 25      |                | 75.31      | Married            | 0                | Sculpting, Drawing, Animation |
+| Henry          | Murray        | 25      | Journalist     | 62.87      | Married            | 0                | Cooking, Juggling             |
 
-The outcome should be an IEnumerable<Person>. The excel repository requires information about the column mapping of individual properties of the Person domain object. This mapping information contains information that e.g. Prename is called 'First Name' in the excel and stores string values in column A. 
+The result should be an `IEnumerable<Person>`. The Excel repository requires information about the column mapping of individual properties of the Person domain object. This mapping information contains information that e.g. Prename is called 'First Name' in the Excel and stores string values in column A. 
 
 Such mapping information can be configured by two different methods. By [attribute based annotations](#mapping-by-attributes) added to the domain object. Or by utilizing the [fluent API](#mapping-using-the-fluentAPI) of the ExcelContext's `ModelBuilder` to map individual attributes similar to Microsoft's EntityFramework. 
 
-An annotated DomainObject handles the mapping of excel columns to attributes. To ensure that column headers of the excel are checked for match of property name or provided name, a column name can be supplied as additional attribute parameter. The parser will log a warning if no match could be found.
+An annotated DomainObject handles the mapping of Excel columns to attributes. To ensure that column headers of the Excel are checked for match of property name or provided name, a column name can be supplied as additional attribute parameter. The parser will log a warning if no match could be found.
 
 # Mapping by Attributes
-Usage of attributes for mapping of class properties to excel columns results in less clean POCO domain object classes references to the storage technology, i.e. excel, are present in the class definition. However it should be noted that these attributes are defined in base `HEAL.Entities.Objects` library and have to technology specific dependencies, and therefore can be considered a still 'quite' clean approach. 
+Usage of attributes for mapping of class properties to Excel columns results in less clean POCO domain object classes references to the storage technology, i.e. Excel, are present in the class definition. However it should be noted that these attributes are defined in base `HEAL.Entities.Objects` library and have to technology specific dependencies, and therefore can be considered a still 'quite' clean approach. 
 
-However, as soon as excel structure definition changes over different files the fluentAPI variant is the way to go. 
+However, as soon as Excel structure definition changes over different files the fluentAPI variant is the way to go. 
 
 ```C#
 public class DomainObject_Attributes : IDomainObject<int>, ITestDomainObject {
@@ -60,7 +60,7 @@ context.BuildAttributedEntity<DomainObject_Attributes>();
 ```
 
 # Mapping using the fluentAPI
-Usage of the fluentAPI for mapping of class properties to excel columns results in cleaner POCO domain object classes as no reference to the storage technology is present.
+Usage of the fluentAPI for mapping of class properties to Excel columns results in cleaner POCO domain object classes as no reference to the storage technology is present.
 ```c#
 public class DomainObject_FluentApi : IDomainObject<int> {
   public int PrimaryKey { get; set; }
@@ -130,7 +130,7 @@ public class TestExcelContext : ExcelContext {
 As the fluent API has no additional restrictions by the .NET runtime you can also defined the cell parsers as either ICellParser instances or inline Expressions. The fluentAPI is also ably to determine the target type from the property selector and therefore even the return type of the parser can be checked and determined at build time. 
 
 # Mapping the column position
-Each mapped attribute of the domain object normally corresponds to one column of the excel. This column address can be defined by either using the string address, e.g. 'AB', of a column or its corresponding int value 28 or last but not least utilizing the `ExcelColumnEnum` enumeration that provides 250 default values and returns the corresponding int column index.
+Each mapped attribute of the domain object normally corresponds to one column of the Excel. This column address can be defined by either using the string address, e.g. 'AB', of a column or its corresponding int value 28 or last but not least utilizing the `ExcelColumnEnum` enumeration that provides 250 default values and returns the corresponding int column index.
 
 ```C#
 //attribute based
@@ -147,9 +147,9 @@ builder.Property(x => x.Occupation)
   .WithDefault("UNEMPLOYED");
 ```
 
-# Using additional excel attributes
-Additional excel information that might not be stored only in columns might also be interesting for data access methods.
-E.g. the excel row id might me used as INT based row ID.
+# Using additional Excel attributes
+Additional Excel information that might not be stored only in columns might also be interesting for data access methods.
+E.g. the Excel row id might me used as INT based row ID.
 
 ```C#
 //attribute based
@@ -222,7 +222,7 @@ builder.Property(x => x.HasChildren)
 ```
 
 # Providing a default value
-Default values are applied if the cell contents of the excel column are empty, i.e. null. Instead of the .net default(<AttributeType>) the specified default value is applied to the property. For example lets assume the occupation should read 'UNEMPLOYED' if the field is left empty in the excel, or you store some complex type that has a non trivial default value.
+Default values are applied if the cell contents of the Excel column are empty, i.e. null. Instead of the .net default(<AttributeType>) the specified default value is applied to the property. For example lets assume the occupation should read 'UNEMPLOYED' if the field is left empty in the Excel, or you store some complex type that has a non trivial default value.
 
 ```C#
 //attribute based
@@ -241,7 +241,7 @@ builder.Property(x => x.Occupation)
 
 
 # Providing a column name
-Domain object property name and column headers in excel might not match. Per default this no issue for the excel repository, but this default behavior can be change in the `ExcelOptions` that can be passed in the constructor of an `ExcelContext`. If no `ExcelOptions` instance is passed, a default one is created.
+Domain object property name and column headers in Excel might not match. Per default this no issue for the Excel repository, but this default behavior can be change in the `ExcelOptions` that can be passed in the constructor of an `ExcelContext`. If no `ExcelOptions` instance is passed, a default one is created.
 
 ```C#
 //default
@@ -267,7 +267,7 @@ builder.Property(x => x.Prename)
 # Detect the end of Data
 Alternatively to a fixed maximum line number, the end of data stream can also be detected by an delimiter function. This is thought to be the default usage case. Such a delimiter can be added once for every domain object that is tracked by a context. 
 
-This works in the following manner. A row is still parsed as usual and the repository still creates the actual domain object. But, since the parsed row contains no further values in the excel, you can take notice of this fact in some domain object attribute. The Id that tracks the excel row number is still populated, but for example the surname and prename field are now both empty. 
+This works in the following manner. A row is still parsed as usual and the repository still creates the actual domain object. But, since the parsed row contains no further values in the Excel, you can take notice of this fact in some domain object attribute. The Id that tracks the Excel row number is still populated, but for example the surname and prename field are now both empty. 
 
 Therefore we assume that the end of data in the file has been reached.
 
