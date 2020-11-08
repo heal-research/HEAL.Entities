@@ -8,7 +8,7 @@ trigger:
   branches:
     include:
     - master
-    - release/*
+    - 'v*'
     - feature/*
   paths:
     exclude:
@@ -23,9 +23,14 @@ variables:
   # SolutionDir variable is required for prebuild events in projects
   SolutionDir: '$(Build.SourcesDirectory)\src\' 
   buildConfiguration: Release
+  isPublicRelease: $[eq(variables['Build.SourceBranch'], '*release/v*')]
+
 
 steps:
-
+# ------------ preserve credentials for tagging ------------
+- checkout: self
+  persistCredentials: true
+  
 # ------------ Nerdbank.GitVersioning ------------
 - task: DotNetCoreCLI@2  
   displayName: Install NBGV tool
@@ -74,13 +79,37 @@ steps:
     packagesToPack: '**/*.csproj;!**/*Tests.csproj'
     versioningScheme: 'off'
     includeSymbols: true
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+    packDestination: '$(Build.ArtifactStagingDirectory)/packages'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/packages'
+    ArtifactName: 'packages'
+    publishLocation: 'Container'
+  displayName: Publish deployable packages
 
 - task: NuGetCommand@2
   displayName: 'nuget push'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/packages/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/packages/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '01df4817-6e16-41ba-b8af-e7897f1094e2/2685559a-1507-43e0-94d3-3164d6ca23c1'
     allowPackageConflicts: true
+    
+# ------------  Tag git commit with version number ------------
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      if (git tag | select-string "$(Build.BuildNumber)") {
+        Write-Output "tag already exists for $(Build.BuildNumber)."
+        exit 0
+      }
+      else {
+        Write-Output "Tagging $(Build.Repository.Name) with $(Build.BuildNumber)"
+        git tag "$(Build.BuildNumber)"
+        git push origin "$(Build.BuildNumber)"
+      }
+    errorActionPreference: 'continue'
+  condition: and(succeeded(), eq(variables.isPublicRelease, true))
