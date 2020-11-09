@@ -4,9 +4,9 @@
     <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
     <Company></Company>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/heal-research/HEAL.Entities</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Description>Microsoft.EntityFrameworkCore based repository classed for DWH and DB data access.</Description>
+    <Description>Repository implementations for RDBMS access. Provides default implementations for abstract base classes and interfaces for domain oriented CRUD access to relational databases. Provides repositories for Data Vault 2.0.</Description>
   </PropertyGroup>
 
   <ItemGroup>

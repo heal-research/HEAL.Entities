@@ -4,9 +4,9 @@
     <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
     <Company></Company>
     <Product />
-    <Description>Interfaces and abstract implementations of repository based data access.</Description>
+    <Description>Interfaces and abstract base implementations for DataAccess.</Description>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/heal-research/HEAL.Entities</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
