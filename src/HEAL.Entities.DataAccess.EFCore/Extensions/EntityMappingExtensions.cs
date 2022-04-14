@@ -9,7 +9,7 @@ using HEAL.Entities.Objects.Dwh.DataVaultV2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace HEAL.Entities.DataAccess.EFCore.Dwh.DataVaultV2 {
+namespace HEAL.Entities.DataAccess.EFCore {
   public static class EntityMappingExtensions {
     /// <summary>
     /// Mapping the single default primary Key Object to the Tables 
