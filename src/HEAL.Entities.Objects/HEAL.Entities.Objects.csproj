@@ -8,9 +8,10 @@
     <Product />
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/heal-research/HEAL.Entities</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Description>Interfaces and base implementations for plain old c# domain objects. Domain Objects are used as base for EF (DB, DWH) or Excel repository acess methods.</Description>
+    <Description>Interfaces, abstract implementations and enumerated types for business entities impllemented as POCOs that
+are required for the data access libraries.</Description>
   </PropertyGroup>
 
   <ItemGroup>

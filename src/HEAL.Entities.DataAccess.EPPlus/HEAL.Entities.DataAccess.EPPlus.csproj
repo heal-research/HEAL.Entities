@@ -5,9 +5,9 @@
     <Authors>Heuristic and Evolutionary Algorithms Laboratory (HEAL)</Authors>
     <Company></Company>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/heal-research/HEAL.Entities</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Description>Provides an easy attribute based repository wrapper to the EPPlus library. The structure of an excel source file is defined for one domain object by defining c# attributes for each class property.</Description>
+    <Description>Domain repository based access to Excel files. Utilizes EPPlus for formula calculation prior to data reads. Currently only supports only read access.</Description>
   </PropertyGroup>
 
   <ItemGroup>

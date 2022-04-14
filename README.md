@@ -1,5 +1,4 @@
-[![Build Status](https://dev.azure.com/heal-research/HEAL.Entities/_apis/build/status/heal-research.HEAL.Entities?branchName=master)](https://dev.azure.com/heal-research/HEAL.Entities/_build/latest?definitionId=1&branchName=master)
-
+[![Build Status](https://dev.azure.com/heal-research/HEAL.Entities/_apis/build/status/heal-research.HEAL.Entities?branchName=master)](https://dev.azure.com/heal-research/HEAL.Entities/_build/latest?definitionId=1&branchName=master) [![NuGet package](https://img.shields.io/badge/nuget-HEAL.Entites-blue)](https://www.nuget.org/packages?q=HEAL.Entities)
 # HEAL.Entities
 HEAL.Entities provides default classes and implementations for domain driven software development and application design. Including repository implementations for:
 - CRUD access to any RDBMS compatible with EntityFrameworkCore,
@@ -18,8 +17,11 @@ HEAL.Entities.Utils provides additional utilities, snippets, and extension metho
 # Getting Started
 
 ## Get the Nuget Packages
-All release packages of this solution can be found on the public nuget.org feed.
 
+### Public Feed
+All release packages of this solution can be found on the public [nuget.org](https://www.nuget.org/packages?q=HEAL.Entities) feed.
+
+### Prerelease Feed
 Additionally, we provide a public nuget build feed where you can get the latest release candidate or feature builds from our CI platform see the [development instructions](docs/development.md).
 
 To use the package include the following feed URL in visual studio 
@@ -43,25 +45,29 @@ Prerequisites and build instructions can be found in the [development instructio
 
 # Features and Usage 
 
-- [**HEAL.Entities.DataAccess.Abstractions**](#abstract-repository)
-
+- [**HEAL.Entities.DataAccess.Abstractions**](#abstract-repository) 
   Interfaces and abstract base implementations for DataAccess
+  [![NuGet package](https://img.shields.io/nuget/v/HEAL.Entities.DataAccess.Abstractions)](https://nuget.org/packages/HEAL.Entities.DataAccess.Abstractions)
 
 - [**HEAL.Entities.DataAccess.EFCore**](#rdbms-repositories) or visit [here](docs/HEAL.Entities.DataAccess.EFCore.md) for details
 
   Repository implementations for RDBMS access. Provides default implementations for abstract base classes and interfaces for domain oriented CRUD access to relational databases. Provides repositories for Data Vault 2.0.
+  [![NuGet package](https://img.shields.io/nuget/v/HEAL.Entities.DataAccess.EFCore)](https://nuget.org/packages/HEAL.Entities.DataAccess.EFCore)
 
 - [**HEAL.Entities.DataAccess.EPPlus**](#excel-repositories) or visit [here](docs/HEAL.Entities.DataAccess.EPPlus.md) for details
 
   Domain repository based access to Excel files. Utilizes [EPPlus](https://github.com/EPPlusSoftware/EPPlus) for formula calculation prior to data reads. *Currently only supports only read access.*
+  [![NuGet package](https://img.shields.io/nuget/v/HEAL.Entities.DataAccess.EPPlus)](https://nuget.org/packages/HEAL.Entities.DataAccess.EPPlus)
 
 - [**HEAL.Entities.Objects**](#domain-objects)
   Interfaces, abstract implementations and enumerated types for business entities impllemented as POCOs that 
   are required for the data access libraries.
+  [![NuGet package](https://img.shields.io/nuget/v/HEAL.Entities.Objects)](https://nuget.org/packages/HEAL.Entities.Objects)
 
 - [**HEAL.Entities.Utils**](#utils-library) or visit [here](docs/HEAL.Entities.Utils.md) for details
 
   Code snippets and extension methods that are shared by internal libraries or are reoccurring in multiple projects. The contents of this project are restricted to target standard .NET namespaces. No further/external dependencies are welcome in this project in order to ensure that the Utils project can be consumed without dependency issues.
+  [![NuGet package](https://img.shields.io/nuget/v/HEAL.Entities.Utils)](https://nuget.org/packages/HEAL.Entities.Utils)
 
 # Abstract Repository
 The `HEAL.Entities.DataAccess.Abstractions` library contains the interfaces and abstract implementations of domain driven data access repositories. The `IReadRepository<TEntity, TKey>` interface shown below defines the minimum methods required for read-only access. The `ICRUDDomainRepository<TEntity, TKey>` interface specializes functionality for create, read, update and delete capabilities. 

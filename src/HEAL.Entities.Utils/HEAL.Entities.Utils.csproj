@@ -7,9 +7,9 @@
     <RootNamespace>HEAL.Entities.Utils</RootNamespace>
     <Company></Company>
     <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
+    <RepositoryUrl>https://github.com/heal-research/HEAL.Entities</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <Description>Extension methods and base implementations of several util features. e.g. QuickEuqalityComparer, Extensions for IEnumerable, Regex, ...</Description>
+    <Description>Code snippets and extension methods that are shared by internal libraries or are reoccurring in multiple projects. The contents of this project are restricted to target standard .NET namespaces.</Description>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Properties\**" />
