@@ -8,8 +8,8 @@ trigger:
   branches:
     include:
     - master
-    - 'v*'
     - feature/*
+    - release/v*
   paths:
     exclude:
     - docs/*
